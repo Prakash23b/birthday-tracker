@@ -4,12 +4,12 @@ import AppRoutes from "./routes/AppRoutes";
 import { ThemeContext } from "./context/ThemeContext";
 
 function App() {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <>
       <button
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        onClick={toggleTheme}
         style={{
           position: "fixed",
           top: 16,

@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import html2canvas from "html2canvas";
 import { FiDownload, FiGift } from "react-icons/fi";
 import "./BannerGenerator.css";
 
@@ -16,29 +17,22 @@ function BannerGenerator() {
   const [showBalloons, setShowBalloons] = useState(true);
   const [showCake, setShowCake] = useState(true);
   const [showConfetti, setShowConfetti] = useState(true);
+  const previewRef = useRef(null);
 
   const member = useMemo(() => members.find((item) => item.id === selectedMember) || members[0], [selectedMember]);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    if (!previewRef.current) return;
+
+    const canvas = await html2canvas(previewRef.current, {
+      backgroundColor: "#5b21b6",
+      scale: 2,
+      useCORS: true,
+    });
+
     const link = document.createElement("a");
-    link.href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-        <rect width="1920" height="1080" rx="40" fill="#5b21b6"/>
-        <rect x="60" y="60" width="1800" height="960" rx="32" fill="url(#g)"/>
-        <defs>
-          <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8b5cf6" />
-            <stop offset="100%" stop-color="#38bdf8" />
-          </linearGradient>
-        </defs>
-        <circle cx="320" cy="220" r="120" fill="#f472b6" fill-opacity="0.35"/>
-        <circle cx="1580" cy="260" r="150" fill="#facc15" fill-opacity="0.25"/>
-        <text x="960" y="430" font-family="Arial, sans-serif" font-size="70" font-weight="700" fill="white" text-anchor="middle">Happy Birthday</text>
-        <text x="960" y="530" font-family="Arial, sans-serif" font-size="86" font-weight="800" fill="white" text-anchor="middle">${member.name}</text>
-        <text x="960" y="590" font-family="Arial, sans-serif" font-size="36" fill="#e0f2fe" text-anchor="middle">${member.department}</text>
-      </svg>
-    `);
-    link.download = `${member.name.replace(/\s+/g, "-").toLowerCase()}-birthday-banner.svg`;
+    link.download = `${member.name.replace(/\s+/g, "-").toLowerCase()}-birthday-banner.png`;
+    link.href = canvas.toDataURL("image/png");
     link.click();
   };
 
@@ -88,7 +82,7 @@ function BannerGenerator() {
           </aside>
 
           <div className="preview-card">
-            <div className="preview-canvas">
+            <div ref={previewRef} className="preview-canvas">
               {showBalloons ? (
                 <>
                   <div className="balloon" style={{ left: "12%", background: balloonColors[0] }} />

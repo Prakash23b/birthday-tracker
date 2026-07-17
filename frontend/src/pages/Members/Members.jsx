@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FiPlus, FiSearch, FiUsers, FiX } from "react-icons/fi";
+import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
+import AddMemberModal from "../../components/AddMemberModal/AddMemberModal";
 import "./Members.css";
 
 const initialMembers = [
@@ -11,46 +12,17 @@ const initialMembers = [
 function Members() {
   const [showModal, setShowModal] = useState(false);
   const [members, setMembers] = useState(initialMembers);
-  const [formData, setFormData] = useState({
-    name: "",
-    birthday: "",
-    department: "",
-    team: "",
-    designation: "",
-    email: "",
-    phone: "",
-    nickname: "",
-    favoriteColor: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleAddMember = (member) => {
     setMembers((prev) => [
-      ...prev,
       {
-        name: formData.name || "New Member",
-        role: formData.designation || "Team Member",
-        email: formData.email || "new@company.com",
-        birthday: formData.birthday || "TBD",
+        name: member.name || "New Member",
+        role: member.designation || "Team Member",
+        email: member.email || "new@company.com",
+        birthday: member.birthday || "TBD",
       },
+      ...prev,
     ]);
-    setFormData({
-      name: "",
-      birthday: "",
-      department: "",
-      team: "",
-      designation: "",
-      email: "",
-      phone: "",
-      nickname: "",
-      favoriteColor: "",
-    });
-    setShowModal(false);
   };
 
   return (
@@ -101,71 +73,11 @@ function Members() {
         )}
       </section>
 
-      {showModal ? (
-        <div className="modal-backdrop" onClick={() => setShowModal(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div>
-                <div className="modal-title">Add Member</div>
-                <div className="modal-subtitle">Create a new profile for the celebration roster.</div>
-              </div>
-              <button className="modal-close" onClick={() => setShowModal(false)} aria-label="Close modal">
-                <FiX />
-              </button>
-            </div>
-
-            <form className="modal-form" onSubmit={handleSubmit}>
-              <div className="form-grid">
-                <label className="field">
-                  <span>Name</span>
-                  <input name="name" value={formData.name} onChange={handleChange} required />
-                </label>
-                <label className="field">
-                  <span>Birthday</span>
-                  <input type="date" name="birthday" value={formData.birthday} onChange={handleChange} required />
-                </label>
-                <label className="field">
-                  <span>Department</span>
-                  <input name="department" value={formData.department} onChange={handleChange} />
-                </label>
-                <label className="field">
-                  <span>Team</span>
-                  <input name="team" value={formData.team} onChange={handleChange} />
-                </label>
-                <label className="field">
-                  <span>Designation</span>
-                  <input name="designation" value={formData.designation} onChange={handleChange} />
-                </label>
-                <label className="field">
-                  <span>Email</span>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                </label>
-                <label className="field">
-                  <span>Phone</span>
-                  <input name="phone" value={formData.phone} onChange={handleChange} />
-                </label>
-                <label className="field">
-                  <span>Nickname</span>
-                  <input name="nickname" value={formData.nickname} onChange={handleChange} />
-                </label>
-                <label className="field">
-                  <span>Favorite Color</span>
-                  <input name="favoriteColor" value={formData.favoriteColor} onChange={handleChange} />
-                </label>
-              </div>
-
-              <div className="modal-actions">
-                <button type="button" className="secondary-btn" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="add-btn">
-                  Save Member
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      ) : null}
+      <AddMemberModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleAddMember}
+      />
     </div>
   );
 }

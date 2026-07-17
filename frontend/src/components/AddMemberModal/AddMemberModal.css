@@ -1,0 +1,123 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(2, 6, 23, 0.72);
+}
+
+.modal-card {
+  width: min(720px, 100%);
+  border-radius: 24px;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(15, 23, 42, 0.84));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 80px rgba(2, 6, 23, 0.34);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.modal-subtitle {
+  color: rgba(226, 232, 240, 0.78);
+  margin-top: 0.2rem;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+}
+
+.modal-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field span {
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.field input {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem;
+  outline: none;
+}
+
+.field input::placeholder {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+.field-error {
+  color: #fda4af;
+  font-size: 0.78rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.secondary-btn,
+.submit-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}
