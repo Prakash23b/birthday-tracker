@@ -21,12 +21,14 @@
   color: white;
   font-size: 1.2rem;
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
+  flex-shrink: 0;
 }
 
 .card-content {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  min-width: 0;
 }
 
 .card-title {
@@ -38,6 +40,11 @@
   font-size: 1.35rem;
   font-weight: 700;
   color: #f8fafc;
+}
+
+.card-trend {
+  font-size: 0.8rem;
+  color: #7dd3fc;
 }
 
 @media (max-width: 640px) {
