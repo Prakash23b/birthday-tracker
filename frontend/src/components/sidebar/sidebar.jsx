@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import {
   FiCalendar,
   FiGift,
@@ -11,15 +12,51 @@ import { RiCake3Line } from "react-icons/ri";
 import "./sidebar.css";
 
 const menuItems = [
-  { label: "Dashboard", icon: <FiHome /> },
-  { label: "Members", icon: <FiUsers /> },
-  { label: "Calendar", icon: <FiCalendar /> },
-  { label: "Today's Birthdays", icon: <FiGift /> },
-  { label: "Weekly", icon: <FiGift /> },
-  { label: "Monthly", icon: <FiGift /> },
-  { label: "Banner Generator", icon: <FiStar /> },
-  { label: "Settings", icon: <FiSettings /> },
-  { label: "Logout", icon: <FiLogOut /> },
+  {
+    label: "Dashboard",
+    icon: <FiHome />,
+    path: "/dashboard",
+  },
+  {
+    label: "Members",
+    icon: <FiUsers />,
+    path: "/members",
+  },
+  {
+    label: "Calendar",
+    icon: <FiCalendar />,
+    path: "/calendar",
+  },
+  {
+    label: "Today's Birthdays",
+    icon: <FiGift />,
+    path: "/dashboard",
+  },
+  {
+    label: "Weekly",
+    icon: <FiGift />,
+    path: "/dashboard",
+  },
+  {
+    label: "Monthly",
+    icon: <FiGift />,
+    path: "/dashboard",
+  },
+  {
+    label: "Banner Generator",
+    icon: <FiStar />,
+    path: "/banner-generator",
+  },
+  {
+    label: "Settings",
+    icon: <FiSettings />,
+    path: "/settings",
+  },
+  {
+    label: "Logout",
+    icon: <FiLogOut />,
+    path: "/",
+  },
 ];
 
 function Sidebar() {
@@ -29,23 +66,45 @@ function Sidebar() {
         <div className="sidebar-logo">
           <RiCake3Line />
         </div>
+
         <div>
-          <div className="sidebar-title">Birthday Tracker</div>
-          <div className="sidebar-subtitle">Enterprise workspace</div>
+          <div className="sidebar-title">
+            Birthday Tracker
+          </div>
+
+          <div className="sidebar-subtitle">
+            Enterprise workspace
+          </div>
         </div>
       </div>
 
-      <nav className="sidebar-nav" aria-label="Sidebar navigation">
-        {menuItems.map((item, index) => (
-          <div key={item.label} className={`sidebar-item ${index === 0 ? "active" : ""}`}>
-            <span className="sidebar-icon">{item.icon}</span>
+      <nav
+        className="sidebar-nav"
+        aria-label="Sidebar navigation"
+      >
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.label}
+            to={item.path}
+            className={({ isActive }) =>
+              `sidebar-item ${
+                isActive ? "active" : ""
+              }`
+            }
+          >
+            <span className="sidebar-icon">
+              {item.icon}
+            </span>
+
             <span>{item.label}</span>
-          </div>
+          </NavLink>
         ))}
       </nav>
 
       <div className="sidebar-footer">
-        <div className="sidebar-pill">✨ Premium planning</div>
+        <div className="sidebar-pill">
+          ✨ Premium planning
+        </div>
       </div>
     </aside>
   );
