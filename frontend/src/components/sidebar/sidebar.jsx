@@ -30,17 +30,17 @@ const menuItems = [
   {
     label: "Today's Birthdays",
     icon: <FiGift />,
-    path: "/dashboard",
+    path: "/today-birthdays",
   },
   {
     label: "Weekly",
     icon: <FiGift />,
-    path: "/dashboard",
+    path: "/weekly",
   },
   {
     label: "Monthly",
     icon: <FiGift />,
-    path: "/dashboard",
+    path: "/monthly",
   },
   {
     label: "Banner Generator",

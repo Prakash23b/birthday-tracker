@@ -1,64 +1,237 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiUsers } from "react-icons/fi";
 import AddMemberModal from "../../components/AddMemberModal/AddMemberModal";
+import api from "../../services/api";
 import "./Members.css";
-
-const initialMembers = [
-  { name: "Alicia Lee", role: "Engineering Lead", email: "alicia@company.com", birthday: "March 14" },
-  { name: "Marcus Chen", role: "Product Designer", email: "marcus@company.com", birthday: "April 22" },
-  { name: "Priya Singh", role: "People Ops", email: "priya@company.com", birthday: "May 3" },
-];
 
 function Members() {
   const [showModal, setShowModal] = useState(false);
-  const [members, setMembers] = useState(initialMembers);
+  const [members, setMembers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleAddMember = (member) => {
-    setMembers((prev) => [
-      {
-        name: member.name || "New Member",
-        role: member.designation || "Team Member",
-        email: member.email || "new@company.com",
-        birthday: member.birthday || "TBD",
-      },
-      ...prev,
-    ]);
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+
+  const fetchMembers = async () => {
+    try {
+      const response = await api.get("/members/");
+      setMembers(response.data);
+    } catch (error) {
+      console.error("Error fetching members:", error);
+    }
   };
+
+  const handleAddMember = async (member) => {
+    try {
+      await api.post("/members/", {
+        name: member.name,
+        email: member.email,
+        department: member.department,
+        designation: member.designation,
+        birthday: member.birthday,
+      });
+
+      await fetchMembers();
+
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error adding member:", error);
+    }
+  };
+
+  const handleDeleteMember = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this member?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/members/${id}`);
+
+      setMembers((prevMembers) =>
+        prevMembers.filter(
+          (member) => member.id !== id
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Error deleting member:",
+        error
+      );
+    }
+  };
+
+  const handleEditMember = async (member) => {
+    const name = window.prompt(
+      "Edit Name",
+      member.name
+    );
+
+    if (!name) return;
+
+    const email = window.prompt(
+      "Edit Email",
+      member.email
+    );
+
+    if (!email) return;
+
+    const department = window.prompt(
+      "Edit Department",
+      member.department
+    );
+
+    if (!department) return;
+
+    const designation = window.prompt(
+      "Edit Designation",
+      member.designation
+    );
+
+    if (!designation) return;
+
+    const birthday = window.prompt(
+      "Edit Birthday (YYYY-MM-DD)",
+      member.birthday
+    );
+
+    if (!birthday) return;
+
+    try {
+      await api.put(`/members/${member.id}`, {
+        name,
+        email,
+        department,
+        designation,
+        birthday,
+      });
+
+      await fetchMembers();
+    } catch (error) {
+      console.error(
+        "Error updating member:",
+        error
+      );
+    }
+  };
+
+  const filteredMembers = members.filter(
+    (member) =>
+      member.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="members-shell">
       <section className="members-panel">
         <div className="members-header">
           <div>
-            <div className="members-title">Members</div>
-            <div className="members-subtitle">Manage your team and celebrate every milestone.</div>
+            <div className="members-title">
+              Members
+            </div>
+
+            <div className="members-subtitle">
+              Manage your team and celebrate every
+              milestone.
+            </div>
           </div>
 
           <div className="members-actions">
-            <label className="members-search" aria-label="Search members">
+            <label
+              className="members-search"
+              aria-label="Search members"
+            >
               <FiSearch />
-              <input type="text" placeholder="Search Members" />
+
+              <input
+                type="text"
+                placeholder="Search Members"
+                value={searchTerm}
+                onChange={(e) =>
+                  setSearchTerm(
+                    e.target.value
+                  )
+                }
+              />
             </label>
-            <button className="add-btn" onClick={() => setShowModal(true)}>
-              <FiPlus style={{ marginRight: "0.4rem" }} />
+
+            <button
+              className="add-btn"
+              onClick={() =>
+                setShowModal(true)
+              }
+            >
+              <FiPlus
+                style={{
+                  marginRight: "0.4rem",
+                }}
+              />
               Add Member
             </button>
           </div>
         </div>
 
-        {members.length > 0 ? (
+        {filteredMembers.length > 0 ? (
           <div className="members-grid">
-            {members.map((member) => (
-              <article className="member-card" key={member.email}>
+            {filteredMembers.map((member) => (
+              <article
+                className="member-card"
+                key={member.id}
+              >
                 <div className="member-top">
-                  <div className="member-avatar">{member.name.charAt(0)}</div>
+                  <div className="member-avatar">
+                    {member.name?.charAt(0)}
+                  </div>
+
                   <div>
-                    <div className="member-name">{member.name}</div>
-                    <div className="member-role">{member.role}</div>
+                    <div className="member-name">
+                      {member.name}
+                    </div>
+
+                    <div className="member-role">
+                      {member.designation}
+                    </div>
                   </div>
                 </div>
-                <div className="member-meta">📧 {member.email}</div>
-                <div className="member-meta">🎂 {member.birthday}</div>
+
+                <div className="member-meta">
+                  📧 {member.email}
+                </div>
+
+                <div className="member-meta">
+                  🏢 {member.department}
+                </div>
+
+                <div className="member-meta">
+                  🎂 {member.birthday}
+                </div>
+
+                <div className="member-actions">
+                  <button
+                    className="edit-btn"
+                    onClick={() =>
+                      handleEditMember(
+                        member
+                      )
+                    }
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() =>
+                      handleDeleteMember(
+                        member.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
+                </div>
               </article>
             ))}
           </div>
@@ -67,15 +240,22 @@ function Members() {
             <div className="empty-icon">
               <FiUsers />
             </div>
-            <h3>No members yet</h3>
-            <p>Add the first member to start building your celebration list.</p>
+
+            <h3>No members found</h3>
+
+            <p>
+              Add your first member to begin
+              tracking birthdays.
+            </p>
           </div>
         )}
       </section>
 
       <AddMemberModal
         open={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={() =>
+          setShowModal(false)
+        }
         onSave={handleAddMember}
       />
     </div>

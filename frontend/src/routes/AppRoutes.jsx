@@ -6,6 +6,9 @@ import Members from "../pages/Members/Members";
 import Calendar from "../pages/Calendar/Calendar";
 import Settings from "../pages/Settings/Settings";
 import BannerGenerator from "../pages/BannerGenerator/BannerGenerator";
+import TodayBirthdays from "../pages/TodayBirthdays/TodayBirthdays";
+import Weekly from "../pages/Weekly/Weekly";
+import Monthly from "../pages/Monthly/Monthly";
 import NotFound from "../pages/NotFound/NotFound";
 
 function AppRoutes() {
@@ -30,13 +33,28 @@ function AppRoutes() {
         />
 
         <Route
-          path="/settings"
-          element={<Settings />}
+          path="/today-birthdays"
+          element={<TodayBirthdays />}
+        />
+
+        <Route
+          path="/weekly"
+          element={<Weekly />}
+        />
+
+        <Route
+          path="/monthly"
+          element={<Monthly />}
         />
 
         <Route
           path="/banner-generator"
           element={<BannerGenerator />}
+        />
+
+        <Route
+          path="/settings"
+          element={<Settings />}
         />
 
         <Route

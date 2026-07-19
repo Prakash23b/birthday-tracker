@@ -8,7 +8,6 @@ from app.api.weekly import router as weekly_router
 from app.api.monthly import router as monthly_router
 from app.api.banner import router as banner_router
 from app.api.calendar import router as calendar_router
-from app.api.upcoming import router as upcoming_router
 
 from app.core.database import Base, engine
 
@@ -28,6 +27,7 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
+# Routers
 app.include_router(members_router)
 app.include_router(dashboard_router)
 app.include_router(birthdays_router)
@@ -35,7 +35,6 @@ app.include_router(weekly_router)
 app.include_router(monthly_router)
 app.include_router(banner_router)
 app.include_router(calendar_router)
-app.include_router(upcoming_router)
 
 
 @app.get("/")
