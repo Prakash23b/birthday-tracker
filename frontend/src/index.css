@@ -36,3 +36,21 @@ h2,
 p {
   margin: 0;
 }
+
+/* ADD BELOW THIS */
+
+body[data-theme="dark"] {
+  background: #060816;
+  color: #f8fafc;
+}
+
+body[data-theme="light"] {
+  background: #ffffff;
+  color: #111827;
+}
+
+/* Optional smooth transition */
+body {
+  transition: background 0.3s ease,
+    color 0.3s ease;
+}

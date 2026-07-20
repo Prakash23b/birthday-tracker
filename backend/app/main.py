@@ -9,10 +9,12 @@ from app.api.monthly import router as monthly_router
 from app.api.banner import router as banner_router
 from app.api.calendar import router as calendar_router
 from app.api.upcoming import router as upcoming_router
+from app.api.auth import router as auth_router
 
 from app.core.database import Base, engine
 
 import app.models.member
+import app.models.user
 
 app = FastAPI(
     title="Birthday Tracker API",
@@ -22,12 +24,14 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 Base.metadata.create_all(bind=engine)
 
+# API Routers
 app.include_router(members_router)
 app.include_router(dashboard_router)
 app.include_router(birthdays_router)
@@ -36,6 +40,7 @@ app.include_router(monthly_router)
 app.include_router(banner_router)
 app.include_router(calendar_router)
 app.include_router(upcoming_router)
+app.include_router(auth_router)
 
 
 @app.get("/")
